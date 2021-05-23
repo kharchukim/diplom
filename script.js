@@ -75,20 +75,16 @@ class Survey { //бизнес-логика для опроса
     end() {
         return '<p class="about-test">The end.</p>';
     }
-
-    execute() {
-        $('#content').html(this.hello());
-    }
 }
 
 function next(num, maxNum) {
-    $('.btn-next-que').click(function() {
+    $('.btn-next-que').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
         $('#content').html(survey.question(survey.surveyConfig.questions[num]));
         $('#content .one-question-answer li').click(function() {
             $('#' + this.id).hide();
             $('#post-' + this.id).show();
             $('#message-' + this.id).show();
-            $('#content .one-question-answer li').unbind('click');
+            $(this).unbind('click');
             console.log(parseInt(parseInt(this.id.match(/\d+/))));
             if(++num < maxNum) {
                 next(num);
@@ -124,6 +120,6 @@ $(document).ready(function() {  //метод ready запускается тол
     );
 
     survey = new Survey(config);
-    survey.execute();
+    $('#content').html(survey.hello());
     next(0, survey.surveyConfig.questions.length);
 });
