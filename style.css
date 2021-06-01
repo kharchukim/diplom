@@ -20,6 +20,7 @@ body {
 
 .header {
     position: relative;
+    margin-top: 20px;
     margin-left: 10px;
     font-family: 'Roboto', sans-serif;
     font-size: 25px;
@@ -29,6 +30,7 @@ body {
 
 .about-test {
     position: relative;
+    margin-top: 20px;
     margin-left: 10px;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
