@@ -1,3 +1,6 @@
+
+//НАЧАЛО ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ
+
 class Answer { //объявление класса: шаблон для создания одного варианта ответа
     answerText;
     message;
@@ -37,16 +40,12 @@ class Survey { //бизнес-логика для опроса
         this.surveyConfig = sc;
     }
 
-    hello() { //html шаблон для приветственного текста
-        return '<p class="about-test">' + this.surveyConfig.startText + '</p><div class="btn-next-que"></div>'; //формируется html-текст, который выводит абзац приветственного текста с кнопкой
+    hello() { //html шаблон для приветственного текста (метод)
+        return '<p class="about-test">' + this.surveyConfig.startText + '</p><div class="btn-test"></div>'; //формируется html-текст, который выводит абзац приветственного текста с кнопкой
     }
 
-    getWrongOrRightStringForAnswer(answer) { 
-        return ;
-    }
-
-    answer(currentAnswer, index) { //функция формирует html для одного ответа
-        let wrongOrRigthText = answer.rightAnswer ? 'right' : 'wrong'; //передаем в функцию класс Answer и если ответ right, то вернет строку rightAnswer
+    answer(currentAnswer, index) { //метод формирует html для одного ответа (ответ и индекс ответа)
+        let wrongOrRigthText = currentAnswer.rightAnswer ? 'right' : 'wrong'; //передаем в функцию класс Answer и если ответ right, то вернет строку rightAnswer
         return '<li id="answer' + index + '">' + currentAnswer.answerText + '</li>\
         <li id="post-answer' + index + '" class="' + wrongOrRigthText + '-answer" style="display:none;">' + currentAnswer.answerText + '</li>\
         <div id="message-answer' + index + '" class="message-' + wrongOrRigthText + '-answer" style="display:none;">\
@@ -54,7 +53,7 @@ class Survey { //бизнес-логика для опроса
         </div>';
     }
 
-    question(question) {
+    question(question) { //формирует html одного вопроса для вывода его на страницу
         let textForAnswers = '';
         let counter = 0;
         question.answers.forEach(element => { //element - каждый ответ
@@ -74,14 +73,14 @@ class Survey { //бизнес-логика для опроса
     }
 }
 
-function next(num, maxNum) {
-    $('.btn-next-que').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
+function next(num, maxNum) { //рекурсивная функция - выводит сам html блока с вопросом и ответами и навешивает обработчики на соответствующие элементы
+    $('.btn-next-que, .btn-test').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
         $('#content').html(survey.question(survey.surveyConfig.questions[num]));
         $('#content .one-question-answer li').click(function() {
             $('#' + this.id).hide();
             $('#post-' + this.id).show();
             $('#message-' + this.id).show();
-            $(this).unbind('click');
+            $('li').unbind('click');
             //console.log(parseInt(parseInt(this.id.match(/\d+/))));
             if(++num < maxNum) {
                 next(num, maxNum);
@@ -93,6 +92,9 @@ function next(num, maxNum) {
         });
     });
 }
+
+//КОНЕЦ ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ 
+
 
 $(document).ready(function() {  //метод ready запускается только тогда, когда весь документ будет загружен
     config = new SurveyConfig( //создание экземпляра класса (всего теста)
@@ -142,7 +144,7 @@ $(document).ready(function() {  //метод ready запускается тол
                     // console.log(x);
                     [
                         new Answer('10', 'Неверно! Но, возможно, тебе просто нужно было подумать подольше.', false),
-                        new Answer('3, поскольку х объявлена как функция, поэтому в итоге она перезаписалась с 10 на 3', true),
+                        new Answer('3', 'Верно! Поскольку х объявлена как функция, поэтому в итоге она перезаписалась с 10 на 3', true),
                         new Answer('13', 'Неверно! Но, возможно, тебе просто нужно было подумать подольше.', false)
                     ]
                 ),
