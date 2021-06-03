@@ -138,15 +138,20 @@ $(document).ready(function() {  //метод ready запускается тол
                     ]
                 ),
                 new Question(
-                    'Завершаем наше тестирование непосредственно кодом. Что выведет в консоль этот код?',
-                    // let x = 3;
-                    // function fn() {
-                    //     x = 10;
-                    //     return;
-                    //     function x() {}
-                    // }
-                    // fn();
-                    // console.log(x);
+                    'Завершаем наше тестирование непосредственно кодом. Что выведет в консоль этот код?<br/>'
+                    + ' <div class="code" id="code">\
+                    let x = 3;<br>\
+                    function fn() {<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
+                    return;<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
+                    function x() {}<br>\
+                    }<br><br>\
+                    fn();<br>\
+                    console.log(x);\
+                    </div>',
+                 
                     [
                         new Answer('10', 'Неверно! Но, возможно, тебе просто нужно было подумать подольше.', false),
                         new Answer('3', 'Верно! Поскольку х объявлена как функция, поэтому в итоге она перезаписалась с 10 на 3', true),
