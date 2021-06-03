@@ -35,6 +35,7 @@ class SurveyConfig { //объявление класса: шаблон для в
 
 class Survey { //бизнес-логика для опроса
     surveyConfig; //все данные для опроса
+    summRight = 0; //количество правильных ответов
 
     constructor(sc) {
         this.surveyConfig = sc;
@@ -44,9 +45,9 @@ class Survey { //бизнес-логика для опроса
         return '<p class="about-test">' + this.surveyConfig.startText + '</p><div class="btn-test"></div>'; //формируется html-текст, который выводит абзац приветственного текста с кнопкой
     }
 
-    answer(currentAnswer, index) { //метод формирует html для одного ответа (ответ и индекс ответа)
+    answer(currentAnswer, index) { //метод формирует html для одного ответа
         let wrongOrRigthText = currentAnswer.rightAnswer ? 'right' : 'wrong'; //передаем в функцию класс Answer и если ответ right, то вернет строку rightAnswer
-        return '<li id="answer' + index + '">' + currentAnswer.answerText + '</li>\
+        return '<li id="answer' + index + '" data-right="' + wrongOrRigthText + '">' + currentAnswer.answerText + '</li>\
         <li id="post-answer' + index + '" class="' + wrongOrRigthText + '-answer" style="display:none;">' + currentAnswer.answerText + '</li>\
         <div id="message-answer' + index + '" class="message-' + wrongOrRigthText + '-answer" style="display:none;">\
             ' + currentAnswer.message + '\
@@ -69,7 +70,7 @@ class Survey { //бизнес-логика для опроса
     }
 
     end() {
-        return '<p class="about-test">The end.</p>';
+        return '<p class="about-test">' + this.summRight + '/' + this.surveyConfig.questions.length + '</p>';
     }
 }
 
@@ -77,6 +78,10 @@ function next(num, maxNum) { //рекурсивная функция - выво�
     $('.btn-next-que, .btn-test').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
         $('#content').html(survey.question(survey.surveyConfig.questions[num]));
         $('#content .one-question-answer li').click(function() {
+            // добавляем сюда код, который увелит счетчик (переменную) с правильными ответами в случае правильного ответа
+            if($(this).data('right') == 'right') {
+                survey.summRight++;
+            }
             $('#' + this.id).hide();
             $('#post-' + this.id).show();
             $('#message-' + this.id).show();
@@ -155,5 +160,3 @@ $(document).ready(function() {  //метод ready запускается тол
     $('#content').html(survey.hello());
     next(0, survey.surveyConfig.questions.length);
 });
-
-
