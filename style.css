@@ -1,17 +1,15 @@
 body {
     margin: 0;
-}
-
-li {
-    cursor: pointer;
+    min-height: 100vh;
 }
 
 .bg-body {
     width: 990px;
-    height: 1000px;
+    min-height: 98vh;
     margin: auto;
     background-color: #01A89E;
     background: linear-gradient(180deg, rgba(1, 168, 158, 0.35) 0%, rgba(172, 227, 223, 0.1715) 100%);
+    padding-bottom: 2vh;
 }
 
 .banner {
@@ -52,9 +50,7 @@ li {
 }
 
 .btn-test:hover {
-    transform: scale(1.1);
-  
-    
+    transform: scale(1.1);  
 }
 
 .one-question {
@@ -72,10 +68,12 @@ li {
     height: 42px;
     margin: auto;
     cursor: pointer;
+    
 }
 
 li {
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .wrong-answer {
@@ -90,8 +88,7 @@ li {
     border-radius: 10px;
     background-color: rgba(164, 173, 165, 0.75);
     font-size: 17px;
-    color: #5C5252;
-    
+    color: #5C5252; 
 }
 
 .right-answer {
@@ -116,7 +113,7 @@ li {
     padding: 10px;
     font-family: 'Roboto', sans-serif;
     color: #504646;
-    font-size: 20px;
+    font-size: 15px;
     line-height: 25px;
     border: 1px solid #504646;
     border-radius: 8px;

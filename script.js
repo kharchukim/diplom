@@ -147,7 +147,7 @@ $(document).ready(function() {  //метод ready запускается тол
                     return;<br>\
                     &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
                     function x() {}<br>\
-                    }<br><br>\
+                    }<br>\
                     fn();<br>\
                     console.log(x);\
                     </div>',
