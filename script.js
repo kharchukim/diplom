@@ -74,7 +74,7 @@ class Survey { //бизнес-логика для опроса
             return '<p class="final-text">Поздравляю, ты сможешь!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '!' + '</p>';
         }
         else{
-            return '<p class="final-text">Упс!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '. ' + '<br><br>' + 'Но не отчаивайся, в мире существует много других интересных профессий!</p>';
+            return '<p class="final-text">Упс!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '. ' + '<br><br>' + 'Но не расстраивайся, в мире существует много других интересных профессий!</p>';
         }
     }
 }
@@ -82,7 +82,9 @@ class Survey { //бизнес-логика для опроса
 function next(num, maxNum) { //рекурсивная функция - выводит сам html блока с вопросом и ответами и навешивает обработчики на соответствующие элементы
     $('.btn-next-que, .btn-test').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
         $('#content').html(survey.question(survey.surveyConfig.questions[num]));
+        $('.btn-next-que, .btn-last-que').hide();
         $('#content .one-question-answer li').click(function() {
+            $('.btn-next-que, .btn-last-que').show();
             // добавляем сюда код, который увелит счетчик (переменную) с правильными ответами в случае правильного ответа
             if($(this).data('right') == 'right') {
                 survey.summRight++;
@@ -95,7 +97,8 @@ function next(num, maxNum) { //рекурсивная функция - выво�
             if(++num < maxNum) {
                 next(num, maxNum);
             } else {
-                $('.btn-next-que').click(function() {
+                $('.btn-next-que').removeClass('btn-next-que').addClass('btn-last-que');
+                $('.btn-last-que').click(function() {
                     $('#content').html(survey.end());
                 });
             }
