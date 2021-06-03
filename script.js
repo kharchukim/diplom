@@ -70,7 +70,12 @@ class Survey { //бизнес-логика для опроса
     }
 
     end() {
-        return '<p class="about-test">' + this.summRight + '/' + this.surveyConfig.questions.length + '</p>';
+        if(this.summRight > 3) {
+            return '<p class="final-text">Поздравляю, ты сможешь!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '!' + '</p>';
+        }
+        else{
+            return '<p class="final-text">Упс!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '. ' + '<br><br>' + 'Но не отчаивайся, в мире существует много других интересных профессий!</p>';
+        }
     }
 }
 
@@ -142,10 +147,10 @@ $(document).ready(function() {  //метод ready запускается тол
                     + ' <div class="code" id="code">\
                     let x = 3;<br>\
                     function fn() {<br>\
-                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
-                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp; x = 10;<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp; x = 10;<br>\
                     return;<br>\
-                    &nbsp;&nbsp;&nbsp;&nbsp;x = 10;<br>\
+                    &nbsp;&nbsp;&nbsp;&nbsp; x = 10;<br>\
                     function x() {}<br>\
                     }<br>\
                     fn();<br>\
