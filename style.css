@@ -149,6 +149,41 @@ li:hover {
     color: #504646;
 }
 
+.completed, .uncompleted {
+    padding: 5px;
+    border-radius: 30px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.completed {
+    background-color: #67a29d;
+    text-decoration: line-through;
+    color: white;
+}
+
+.uncompleted {
+    background-color: rgba(97, 208, 193, 0.22);
+}
+
+.history {
+    margin-top: 20px;
+    padding: 10px;
+    height: 30px;
+    text-align: center;
+}
+
+.restart {
+    padding: 5px;
+    border-radius: 30px;
+    margin: 5px;
+    background-color: #67a29d;
+    color: white;
+    padding-right: 20px;
+    padding-left: 20px;
+    text-decoration: none;
+}
+
 @media (max-width: 991px)  {
     .bg-body {
         width: 100%;
