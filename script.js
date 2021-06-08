@@ -2,14 +2,10 @@
 //НАЧАЛО ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ
 
 
-/*
 function declOfNum(number, titles) {  
     cases = [2, 0, 1, 1, 1, 2];  
     return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
 }
-declOfNum(count, ['найдена', 'найдено', 'найдены']);
-*/
-
 
 class Answer { //объявление класса: шаблон для создания одного варианта ответа
     answerText;
@@ -119,11 +115,13 @@ class Survey { //бизнес-логика для опроса
 
     end() {
         let restart = '<div class="history"><a class="restart" href="">Начать заново</a></div>';
+
+        let numStr = declOfNum(this.summRight, ['правильный ответ', 'правильных ответа', 'правильных ответов']);
         if(this.summRight > 3) {
-            return '<p class="final-text">Поздравляю, ты сможешь!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '!' + '</p>' + restart;
+            return '<p class="final-text">Поздравляю, ты сможешь!<br><br>Твой результат ' + this.summRight + ' ' + numStr + ' из ' + this.surveyConfig.questions.length + '!' + '</p>' + restart;
         }
         else{
-            return '<p class="final-text">Упс!<br><br>Твой результат ' + this.summRight + ' правильных ответов из ' + this.surveyConfig.questions.length + '. ' + '<br><br>' + 'Но не расстраивайся, в мире существует много других интересных профессий!</p>' + restart;
+            return '<p class="final-text">Упс!<br><br>Твой результат ' + this.summRight + ' ' + numStr + ' из ' + this.surveyConfig.questions.length + '. ' + '<br><br>' + 'Но не расстраивайся, в мире существует много других интересных профессий!</p>' + restart;
         }
     }
 }
