@@ -115,7 +115,6 @@ class Survey { //бизнес-логика для опроса
 
     end() {
         let restart = '<div class="history"><a class="restart" href="">Начать заново</a></div>';
-
         let numStr = declOfNum(this.summRight, ['правильный ответ', 'правильных ответа', 'правильных ответов']);
         if(this.summRight > 3) {
             return '<p class="final-text">Поздравляю, ты сможешь!<br><br>Твой результат ' + this.summRight + ' ' + numStr + ' из ' + this.surveyConfig.questions.length + '!' + '</p>' + restart;
