@@ -1,6 +1,16 @@
 
 //НАЧАЛО ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ
 
+
+/*
+function declOfNum(number, titles) {  
+    cases = [2, 0, 1, 1, 1, 2];  
+    return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
+}
+declOfNum(count, ['найдена', 'найдено', 'найдены']);
+*/
+
+
 class Answer { //объявление класса: шаблон для создания одного варианта ответа
     answerText;
     message;
@@ -98,13 +108,13 @@ class Survey { //бизнес-логика для опроса
     getCompleteAnswersHTML() {
         let html = '';
         for (let i = 1; i <= this.surveyConfig.questions.length; i++) {
-            if (this.completeAnswers.indexOf(i) != -1) {
-                html += '<span class="completed">' + i + '</span>';
+            if (this.completeAnswers.indexOf(i) != -1) { //completeAnswers - массив с порядковыми номерами вопросов, на которые уже ответили
+                html += '<span class="completed">' + i + '</span>'; //если на вопрос уже ответили
             } else {
-                html += '<span id="circle' + i + '" class="uncompleted">' + i + '</span>';
+                html += '<span id="circle' + i + '" class="uncompleted">' + i + '</span>'; //если на вопрос еще не ответили
             }
         }
-        return '<div class="history">' + html + '</div>';
+        return '<div class="history">' + html + '</div>'; //строка с номерами вопросов
     }
 
     end() {
@@ -118,8 +128,7 @@ class Survey { //бизнес-логика для опроса
     }
 }
 
-function showQuestion(num, maxNum) {
-    //проверка, что вопрос еще не пройден
+function showQuestion(num, maxNum) { //проверка, что вопрос еще не пройден
     while (survey.completeAnswers.indexOf(num+1) != -1) {
         num++;
     }
@@ -133,12 +142,12 @@ function showQuestion(num, maxNum) {
     //$('.btn-next-que, .btn-last-que').hide();
     $('#content .one-question-answer li').click(function() {
         //$('.btn-next-que, .btn-last-que').show();
-        // добавляем сюда код, который увелит счетчик (переменную) с правильными ответами в случае правильного ответа
+        // добавляем сюда код, который увеличит счетчик (переменную) с правильными ответами в случае правильного ответа
         if($(this).data('right') == 'right') {
             survey.summRight++;
         }
 
-        survey.completeAnswers.push(num);
+        survey.completeAnswers.push(num); //добавление номеров вопросов в массив с номерами вопросов
 
         $('#' + this.id).hide();
         $('#post-' + this.id).show();
@@ -161,8 +170,8 @@ function showQuestion(num, maxNum) {
 }
 
 function circleEvenetsBind(currentId, maxNum) {
-    $('.uncompleted').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
-        let currentId = parseInt(parseInt(this.id.match(/\d+/))) - 1;
+    $('.uncompleted').click(function() { //функция, которая выполнится при клике на кнопку с номером вопроса
+        let currentId = parseInt(this.id.match(/\d+/)) - 1;
         showQuestion(currentId, maxNum);
     });
 }
@@ -179,7 +188,7 @@ function next(num, maxNum) { //рекурсивная функция - выво�
 
 $(document).ready(function() {  //метод ready запускается только тогда, когда весь документ будет загружен
     let dataFromJSONFile = $.ajax({ //синхронный запрос json.txt
-        url: 'json.txt',
+        url: 'config.json',
         async: false
     }).responseText;
     config = new SurveyConfig();
