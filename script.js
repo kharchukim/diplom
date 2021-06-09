@@ -28,7 +28,7 @@ class Question { //объявление класса: шаблон для соз
     }
 }
 
-class SurveyConfig { //объявление класса: шаблон для всего теста (все вопросы в массиве)
+class SurveyConfig { //объявление класса: шаблон для всего теста 
     questions = [];
     startText;
 
@@ -37,7 +37,7 @@ class SurveyConfig { //объявление класса: шаблон для в
         this.startText = st;
     }
 
-    deserialize(json) {
+    deserialize(json) { // из текстового представления создаем объект (весь тест)
         let obj = JSON.parse(json);
         this.startText = obj.startText;
         let questions = [];
@@ -75,7 +75,7 @@ class Survey { //бизнес-логика для опроса
         return '<p class="about-test">' + this.surveyConfig.startText + '</p><div class="btn-test"></div>'; //формируется html-текст, который выводит абзац приветственного текста с кнопкой
     }
 
-    answer(currentAnswer, index) { //метод формирует html для одного ответа
+    answer(currentAnswer, index) { //метод формирует html для одного ответа, currentAnswer - каждый ответ, экземпляр класса answer
         let wrongOrRigthText = currentAnswer.rightAnswer ? 'right' : 'wrong'; //передаем в функцию класс Answer и если ответ right, то вернет строку rightAnswer
         return '<li id="answer' + index + '" data-right="' + wrongOrRigthText + '">' + currentAnswer.answerText + '</li>\
         <li id="post-answer' + index + '" class="' + wrongOrRigthText + '-answer" style="display:none;">' + currentAnswer.answerText + '</li>\
@@ -86,7 +86,7 @@ class Survey { //бизнес-логика для опроса
 
     surveyIsCompleteButtonHTML() { //функция определяет кнопку "след вопрос" или "узнать результат" в зависимости от количества отвеченных вопросов
         if(this.completeAnswers.length >= this.surveyConfig.questions.length) {
-            return '<div class="btn-last-que"></div>';
+            return '<div class="btn-last-que"></div>'; //"узнать результат"
         } else {
             return '<div class="btn-next-que"></div>';
         }
@@ -99,16 +99,16 @@ class Survey { //бизнес-логика для опроса
             textForAnswers += this.answer(element, counter++); 
         });
         return '<div class="one-question">\
-            <p>Вопрос № ' + numberOfQuestion + ': ' + question.questionText + '</p>\
+            <p><b>Вопрос № ' + numberOfQuestion + ':</b> ' + question.questionText + '</p>\
             <ul class="one-question-answer">' +
                 textForAnswers +
             '</ul>\
         </div>'
-            + this.surveyIsCompleteButtonHTML()
-            + this.getCompleteAnswersHTML();
+            + this.surveyIsCompleteButtonHTML() //функция динамически формирует кнопку "след вопрос" или "узнать результат"
+            + this.getCompleteAnswersHTML(); // функция динамически формирует строку с номерами вопросов
     }
 
-    getCompleteAnswersHTML() {
+    getCompleteAnswersHTML() { //функция динамически формирует строку с номерами вопросов
         let html = '';
         for (let i = 1; i <= this.surveyConfig.questions.length; i++) {
             if (this.completeAnswers.indexOf(i) != -1) { //completeAnswers - массив с порядковыми номерами вопросов, на которые уже ответили
@@ -132,29 +132,28 @@ class Survey { //бизнес-логика для опроса
     }
 }
 
-function showQuestion(num, maxNum) { //проверка, что вопрос еще не пройден
-    while (survey.completeAnswers.indexOf(num+1) != -1) {
+function showQuestion(num, maxNum) { 
+    while (survey.completeAnswers.indexOf(num+1) != -1) { //проверка, что вопрос еще не пройден. Позволяет показать след неотвеч вопрос
         num++;
     }
 
-    if (num >= maxNum) {
-        if(survey.completeAnswers.length < maxNum) {
+    if (num >= maxNum) { //код выполняется только на последнем вопросе
+        if(survey.completeAnswers.length < maxNum) { //найдет неотвеченные и записывает их индексы в num
             for (let i = 1; i <= survey.surveyConfig.questions.length; i++) {
-                if (survey.completeAnswers.indexOf(i) == -1) {
+                if (survey.completeAnswers.indexOf(i) == -1) { //если еще есть неотвеч вопросы
                     num = i - 1;
                     break;
                 }
             }
-        } else {
+        } else { //если нет неотвеч вопросов
             $('#content').html(survey.end());
             return;
         }
     }
 
-    $('#content').html(survey.question(survey.surveyConfig.questions[num], num+1));
+    $('#content').html(survey.question(survey.surveyConfig.questions[num], num+1)); //вывод вопросов с ответами для пользователя
     //$('.btn-next-que, .btn-last-que').hide();
     $('#content .one-question-answer li').click(function() {
-        //$('.btn-next-que, .btn-last-que').show();
         // добавляем сюда код, который увеличит счетчик (переменную) с правильными ответами в случае правильного ответа
         if($(this).data('right') == 'right') {
             survey.summRight++;
@@ -162,15 +161,15 @@ function showQuestion(num, maxNum) { //проверка, что вопрос е�
 
         survey.completeAnswers.push(num); //добавление номеров вопросов в массив с номерами вопросов
 
-        $('#' + this.id).hide();
-        $('#post-' + this.id).show();
-        $('#message-' + this.id).show();
-        $('li').unbind('click');
+        $(this).hide(); // "прячет" выбранный ответ
+        $('#post-' + this.id).show(); // показывает зачеркнутый
+        $('#message-' + this.id).show(); // показывает сообщение
+        $('li').unbind('click'); //запрещает повторное нажатие
         //console.log(parseInt(parseInt(this.id.match(/\d+/))));
         $('#circle' + num).removeClass('uncompleted').addClass('completed').unbind('click');
 
         if(survey.completeAnswers.length == survey.surveyConfig.questions.length) {
-            $('.btn-next-que').show().removeClass('btn-next-que').addClass('btn-last-que').click(function() {
+            $('.btn-next-que').show().removeClass('btn-next-que').addClass('btn-last-que').click(function() { //меняет "след вопр" на "узн рез" и навешивает клик
                 $('#content').html(survey.end());
             });
         };
@@ -197,7 +196,7 @@ function circleEvenetsBind(maxNum) {
 }
 
 function next(num, maxNum) { //рекурсивная функция - выводит сам html блока с вопросом и ответами и навешивает обработчики на соответствующие элементы
-    $('.btn-next-que, .btn-test').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос"
+    $('.btn-next-que, .btn-test').click(function() { //функция, которая выполнится при клике на кнопку "след вопрос" и "пройти тест"
         showQuestion(num, maxNum);
     });
 
@@ -207,7 +206,7 @@ function next(num, maxNum) { //рекурсивная функция - выво�
 //КОНЕЦ ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ 
 
 $(document).ready(function() {  //метод ready запускается только тогда, когда весь документ будет загружен
-    let dataFromJSONFile = $.ajax({ //синхронный запрос json.txt
+    let dataFromJSONFile = $.ajax({ //синхронный запрос json
         url: 'config.json',
         async: false
     }).responseText;
