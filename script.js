@@ -1,11 +1,10 @@
 
-//НАЧАЛО ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ
-
-
-function declOfNum(number, titles) {  
+function declOfNum(number, titles) {  //функция для склонения слов
     cases = [2, 0, 1, 1, 1, 2];  
     return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
 }
+
+//НАЧАЛО ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ
 
 class Answer { //объявление класса: шаблон для создания одного варианта ответа
     answerText;
@@ -85,6 +84,14 @@ class Survey { //бизнес-логика для опроса
         </div>';
     }
 
+    surveyIsCompleteButtonHTML() { //функция определяет кнопку "след вопрос" или "узнать результат" в зависимости от количества отвеченных вопросов
+        if(this.completeAnswers.length >= this.surveyConfig.questions.length) {
+            return '<div class="btn-last-que"></div>';
+        } else {
+            return '<div class="btn-next-que"></div>';
+        }
+    }
+
     question(question, numberOfQuestion) { //формирует html одного вопроса для вывода его на страницу
         let textForAnswers = '';
         let counter = 0;
@@ -96,8 +103,8 @@ class Survey { //бизнес-логика для опроса
             <ul class="one-question-answer">' +
                 textForAnswers +
             '</ul>\
-        </div>\
-        <div class="btn-next-que"></div>'
+        </div>'
+            + this.surveyIsCompleteButtonHTML()
             + this.getCompleteAnswersHTML();
     }
 
@@ -129,10 +136,19 @@ function showQuestion(num, maxNum) { //проверка, что вопрос е�
     while (survey.completeAnswers.indexOf(num+1) != -1) {
         num++;
     }
-    console.log(num, maxNum);
+
     if (num >= maxNum) {
-        $('#content').html(survey.end());
-        return;
+        if(survey.completeAnswers.length < maxNum) {
+            for (let i = 1; i <= survey.surveyConfig.questions.length; i++) {
+                if (survey.completeAnswers.indexOf(i) == -1) {
+                    num = i - 1;
+                    break;
+                }
+            }
+        } else {
+            $('#content').html(survey.end());
+            return;
+        }
     }
 
     $('#content').html(survey.question(survey.surveyConfig.questions[num], num+1));
@@ -152,21 +168,28 @@ function showQuestion(num, maxNum) { //проверка, что вопрос е�
         $('li').unbind('click');
         //console.log(parseInt(parseInt(this.id.match(/\d+/))));
         $('#circle' + num).removeClass('uncompleted').addClass('completed').unbind('click');
+
+        if(survey.completeAnswers.length == survey.surveyConfig.questions.length) {
+            $('.btn-next-que').show().removeClass('btn-next-que').addClass('btn-last-que').click(function() {
+                $('#content').html(survey.end());
+            });
+        };
     });
 
-    if(++num < maxNum) {
-        next(num, maxNum);
-    } else {
-        $('.btn-next-que').removeClass('btn-next-que').addClass('btn-last-que');
-        $('.btn-last-que').click(function() {
-            $('#content').html(survey.end());
-        });
-
-        circleEvenetsBind(num, maxNum);
+    if(survey.completeAnswers.length == 0 || survey.completeAnswers.length < maxNum) {
+        next(++num, maxNum);
     }
+
+    if(survey.completeAnswers.length == maxNum - 1){
+        $('.btn-next-que').hide();
+    }
+
+    $('.btn-last-que').click(function() {
+        $('#content').html(survey.end());
+    });
 }
 
-function circleEvenetsBind(currentId, maxNum) {
+function circleEvenetsBind(maxNum) {
     $('.uncompleted').click(function() { //функция, которая выполнится при клике на кнопку с номером вопроса
         let currentId = parseInt(this.id.match(/\d+/)) - 1;
         showQuestion(currentId, maxNum);
@@ -178,7 +201,7 @@ function next(num, maxNum) { //рекурсивная функция - выво�
         showQuestion(num, maxNum);
     });
 
-    circleEvenetsBind(num, maxNum);
+    circleEvenetsBind(maxNum);
 }
 
 //КОНЕЦ ОБЪЯВЛЕНИЯ КЛАССОВ (ШАБЛОНОВ) ДЛЯ ОТВЕТА, ВОПРОСА, НАСТРОЕК ВСЕГО ТЕСТА, ПРЕДСТАВЛЕНИЯ 
